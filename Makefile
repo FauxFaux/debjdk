@@ -10,6 +10,9 @@ base.img: base/Dockerfile base/apt.conf base/build.sh base/sources.list base/to-
 base/to-jdk-9_1.0_all.deb: base/to-jdk-9.equivs
 	cd base && equivs-build ../$^
 
+run:
+	docker run -it $(shell cat base.img) /bin/bash
+
 clean:
 	$(RM) base.img base/to-jdk-9_1.0_all.deb
 
