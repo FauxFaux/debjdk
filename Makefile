@@ -17,5 +17,5 @@ deps:
 	apt-get install equivs
 
 %.pkg: base.img
-	docker run $(shell cat base.img) bash /build.sh $* > $@.fail 2>&1
-	mv $@.fail $@
+	docker run $(shell cat base.img) bash /build.sh $* > $@.wip 2>&1 || mv $@.wip $@.fail
+	-mv $@.wip $@
