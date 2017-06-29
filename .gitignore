@@ -4,3 +4,4 @@ base/to-jdk-9_1.0_all.deb
 *.img
 *.pkg
 *.pkg*
+base/libguice-java_4.0-3_all.deb
