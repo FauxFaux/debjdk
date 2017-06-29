@@ -1,0 +1,19 @@
+### Commented entries have reasonable defaults.
+### Uncomment to edit them.
+Section: misc
+Priority: important
+Standards-Version: 3.9.2
+
+Package: to-jdk-9
+Depends: openjdk-9-jdk
+Provides: openjdk-8-jdk, openjdk-8-jdk-headless, openjdk-8-jre, openjdk-8-jre-headless,
+        default-jdk,
+        java-sdk, java2-sdk, java5-sdk, java6-sdk, java7-sdk, java8-sdk,
+        default-jre,
+        java-runtime, java2-runtime, java5-runtime, java6-runtime, java7-runtime, java8-runtime,
+        default-jre-headless,
+        java-runtime-headless, java2-runtime-headless, java5-runtime-headless, java6-runtime-headless, java7-runtime-headless, java8-runtime-headless
+Conflicts: openjdk-8-jdk, openjdk-8-jdk-headless, openjdk-8-jre, openjdk-8-jre-headless
+
+Description: Block installation of non-jdk-9 packages.
+ See breaks / provides.
