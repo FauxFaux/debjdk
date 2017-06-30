@@ -20,13 +20,10 @@ RUN \
     apt-get clean
 
 COPY to-jdk-9_1.0_all.deb /
-COPY libguice-java_4.0-3_all.deb /
 
 RUN \
-    apt-get install -y libguice-java && \
-    dpkg -i to-jdk-9_1.0_all.deb libguice-java_4.0-3_all.deb && \
-    rm *.deb && \
-    apt-get clean
+    dpkg -i to-jdk-9_1.0_all.deb && \
+    rm to-jdk-9_1.0_all.deb
 
 # quick cheat to save some build time
 RUN \
