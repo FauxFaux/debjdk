@@ -27,6 +27,12 @@ RUN \
 
 # quick cheat to save some build time
 RUN \
-    apt-get install -y maven-debian-helper
+    apt-get install -y maven-debian-helper && \
+    apt-get clean
+
+# build.sh dependencies
+RUN \
+    apt-get install -y bash eatmydata && \
+    apt-get clean
 
 COPY build.sh /
