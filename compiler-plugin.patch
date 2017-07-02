@@ -1,0 +1,42 @@
+diff --git a/maven-compiler-plugin-3.2/debian/changelog b/maven-compiler-plugin-3.2/debian/changelog
+index 458c5a6..202c97f 100644
+--- a/maven-compiler-plugin-3.2/debian/changelog
++++ b/maven-compiler-plugin-3.2/debian/changelog
+@@ -1,3 +1,10 @@
++maven-compiler-plugin (3.2-5.1) UNRELEASED; urgency=medium
++
++  * Non-maintainer upload.
++  * YOLO source and target to 1.6 or higher.
++
++ -- root <root@568c73f41386>  Sun, 02 Jul 2017 11:04:41 +0000
++
+ maven-compiler-plugin (3.2-5) unstable; urgency=medium
+ 
+   * Team upload.
+diff --git a/maven-compiler-plugin-3.2/src/main/java/org/apache/maven/plugin/compiler/AbstractCompilerMojo.java b/maven-compiler-plugin-3.2/src/main/java/org/apache/maven/plugin/compiler/AbstractCompilerMojo.java
+index f459542..ea2c6b6 100644
+--- a/maven-compiler-plugin-3.2/src/main/java/org/apache/maven/plugin/compiler/AbstractCompilerMojo.java
++++ b/maven-compiler-plugin-3.2/src/main/java/org/apache/maven/plugin/compiler/AbstractCompilerMojo.java
+@@ -499,9 +499,20 @@ public abstract class AbstractCompilerMojo
+ 
+         compilerConfiguration.setShowDeprecation( showDeprecation );
+ 
+-        compilerConfiguration.setSourceVersion( getSource() );
++        String source = "1.6";
++        if (Float.parseFloat(getSource()) > 1.6) {
++            source = getSource();
++        }
++
++        String target = "1.6";
++        if (Float.parseFloat(getTarget()) > 1.6) {
++            target = getTarget();
++        }
++
++
++        compilerConfiguration.setSourceVersion( source );
+ 
+-        compilerConfiguration.setTargetVersion( getTarget() );
++        compilerConfiguration.setTargetVersion( target );
+ 
+         compilerConfiguration.setProc( proc );
+

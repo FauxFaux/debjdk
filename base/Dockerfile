@@ -20,14 +20,17 @@ RUN \
     apt-get clean
 
 COPY to-jdk-9_1.0_all.deb /
+COPY libmaven-compiler-plugin-java_3.2-5.1_all.deb /
 
 RUN \
-    dpkg -i to-jdk-9_1.0_all.deb && \
-    rm to-jdk-9_1.0_all.deb
+    apt-get install -y libmaven-compiler-plugin-java && \
+    dpkg -i to-jdk-9_1.0_all.deb libmaven-compiler-plugin-java_3.2-5.1_all.deb && \
+    rm to-jdk-9_1.0_all.deb libmaven-compiler-plugin-java_3.2-5.1_all.deb && \
+    apt-get clean
 
 # quick cheat to save some build time
 RUN \
-    apt-get install -y maven-debian-helper && \
+    apt-get install -y cdbs devscripts javahelper junit4 maven-debian-helper && \
     apt-get clean
 
 # build.sh dependencies
