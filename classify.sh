@@ -15,13 +15,15 @@ egrep -l 'error: bad use of|error: @param |error: block element not|error: unexp
 
 fgrep -l 'is a keyword, and may not be used as an identifier' *.fail | count keyword
 
-egrep -l 'Source option 1\.|-source 1\.. -target 1\..|requires target release 1\.' *.fail | count version
+egrep -l 'Source option 1\.|-source 1\.[1-5] -target 1\.[1-5]|requires target release 1\.' *.fail | count version
 
-egrep -l 'reflect\.InaccessibleObjectException|reference to Module is ambigu|is not visible|because module .* does not export' *.fail | count modules
+egrep -l 'reflect\.InaccessibleObjectException|reference to Module is ambigu|is not visible|because module .* does not export|location: package sun\.misc' *.fail | count modules
 
-egrep -l 'not resolve dependencies for project|dependencies could not be resolved|in offline mode and the artifact|Problem parsing dependency: Build-Depends-Indep' *.fail | count deps
+egrep -l 'not resolve dependencies for project|Problem parsing dependency: Build-Depends-Indep|Non-resolvable parent POM for' *.fail | count deps
 
 egrep -l 'error: incompatible types:' *.fail | count cast
+
+fgrep -l 'There are test failures.' *.fail | count tests
 
 diff -u <(cat .*.lst .jenkins | sort -u) <(ls -1 *.fail | sed 's/.pkg.fail$//' | sort -u) | grep '^+' | cut -c2- | sed 1d > .unknown
 
