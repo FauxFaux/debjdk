@@ -1,57 +1,39 @@
 #!/bin/bash
 
-rm understood
-paste <(
+count() {
+    sed 's/\.pkg\.fail$//; s/\.pkg$//' > .${1}.lst
+}
 
-printf " Success\n=========\n%s total\n" $(ls -1 *.pkg | wc -l)
+ls -1 *.pkg | count success
 
-) <(
+fgrep -l 'encoding US-ASCII' *.fail | count ascii
 
-echo ASCII
-echo =====
-fgrep -l 'encoding US-ASCII' *.fail | sed 's/.pkg.fail$//' | tee -a understood
+egrep -l ': Unable to find javadoc command.*JAVA_HOME' *.fail | count javadoc
 
-) <(
+egrep -l 'error: bad use of|error: @param |error: block element not|error: unexpected content|error: no summary or|error: end tag|error: self-closing|error: bad HTML|error: unexpected end' *.fail \
+    | count doclint
 
-echo javadoc
-echo =======
-egrep -l ': Unable to find javadoc command.*JAVA_HOME' *.fail | sed 's/.pkg.fail$//' | tee -a understood
+fgrep -l 'is a keyword, and may not be used as an identifier' *.fail | count keyword
 
-) <(
+egrep -l 'Source option 1\.|-source 1\.. -target 1\..|requires target release 1\.' *.fail | count version
 
-echo doclint
-echo =======
+egrep -l 'reflect\.InaccessibleObjectException|reference to Module is ambigu|is not visible|because module .* does not export' *.fail | count modules
 
-egrep -l 'error: bad use of|error: @param |error: block element not|error: unexpected content|error: no summary or|error: end tag|error: self-closing' *.fail | sed 's/.pkg.fail$//' | tee -a understood
+egrep -l 'not resolve dependencies for project|dependencies could not be resolved|in offline mode and the artifact|Problem parsing dependency: Build-Depends-Indep' *.fail | count deps
 
-) <(
+egrep -l 'error: incompatible types:' *.fail | count cast
 
-echo identifier
-echo ==========
+diff -u <(cat .*.lst .jenkins | sort -u) <(ls -1 *.fail | sed 's/.pkg.fail$//' | sort -u) | grep '^+' | cut -c2- | sed 1d > .unknown
 
-fgrep -l 'is a keyword, and may not be used as an identifier' *.fail | sed 's/.pkg.fail$//' | tee -a understood
+rm .success.lst
 
-) <(
+for f in .*.lst .unknown; do (
+    echo ${f} | sed 's/^.//; s/.lst$//'
+    echo $(wc -l <${f}) total
+    echo '===='
+    cat ${f} 
+    ) | sed -E 's/(.......)...*(......)/\1*\2/' | sponge ${f}.munged
+done
 
-echo version
-echo =======
-
-fgrep -l 'Source option 1.' *.fail | sed 's/.pkg.fail$//' | tee -a understood
-
-) <(
-
-echo modules
-echo =======
-
-fgrep -l 'reflect.InaccessibleObjectException' *.fail | sed 's/.pkg.fail$//' | tee -a understood
-
-) >first
-
-paste first <(
-
-echo unknown
-echo =======
-diff -u <(<understood sort -u) <(ls -1 *.fail | sed 's/.pkg.fail$//') | grep '^+' | cut -c2- | sed 1d
-
-)| column -nt -s $'\t'
+paste .*.munged | column -nt -s $'\t'
 
