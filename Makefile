@@ -1,7 +1,7 @@
 all: base.img
 
 base.img: base/Dockerfile base/apt.conf base/build.sh base/sources.list \
-		base/to-jdk-9_1.0_all.deb base/libmaven-compiler-plugin-java_3.2-5.1_all.deb
+		base/to-jdk-9_1.0_all.deb base/libmaven-javadoc-plugin-java_2.10.4-2_all.deb
 	# actually do the build
 	docker build base
 

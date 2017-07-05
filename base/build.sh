@@ -30,7 +30,7 @@ apt-get build-dep -y .
 
 
 msg Build
-nice ionice eatmydata dpkg-buildpackage -us -uc -b
+JAVA_HOME=/usr/lib/jvm/java-9-openjdk-amd64 nice ionice eatmydata dpkg-buildpackage -us -uc -b
 
 
 msg Done
