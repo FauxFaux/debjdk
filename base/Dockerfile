@@ -22,8 +22,7 @@ RUN \
 COPY *.deb /
 
 RUN \
-    apt-get install -y libmaven-javadoc-plugin-java && \
-    dpkg -i *.deb && \
+    apt-get install -yf --allow-downgrades ./*.deb && \
     rm *.deb && \
     apt-get clean
 
