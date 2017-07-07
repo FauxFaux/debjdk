@@ -1,23 +1,26 @@
-Description: Disable doclint by default
- OpenJDK 8 adds and enables doclint by default. This catches issues in
- javadoc comments. It is too strict, breaks javadoc compilation and, in
- general, breaks the build for old code known to build with previous
- versions of OpenJDK.
- .
- See: http://blog.joda.org/2014/02/turning-off-doclint-in-jdk-8-javadoc.html
- See: https://lists.fedoraproject.org/pipermail/java-devel/2014-February/005150.html
-Author: Andrew John Hughes <ahughes@redhat.com>
+Description: Allow older -source and -target options
+Author: Chris West <solo-debian@goeswhere.com>
 Forwarded: not-needed
-Index: b/langtools/src/jdk.javadoc/share/classes/com/sun/tools/javadoc/DocEnv.java
+Index: b/langtools/src/jdk.compiler/share/classes/com/sun/tools/javac/main/Arguments.java
 ===================================================================
---- a/langtools/src/jdk.javadoc/share/classes/jdk/javadoc/internal/doclets/toolkit/WorkArounds.java
-+++ b/langtools/src/jdk.javadoc/share/classes/jdk/javadoc/internal/doclets/toolkit/WorkArounds.java
-@@ -125,7 +125,7 @@ public class WorkArounds {
+--- a/langtools/src/jdk.compiler/share/classes/com/sun/tools/javac/main/Arguments.java
++++ b/langtools/src/jdk.compiler/share/classes/com/sun/tools/javac/main/Arguments.java
+@@ -585,14 +585,16 @@ public class Arguments {
+         boolean obsoleteOptionFound = false;
+
+         if (source.compareTo(Source.MIN) < 0) {
+-            log.error(Errors.OptionRemovedSource(source.name, Source.MIN.name));
++            log.warning(LintCategory.OPTIONS, Warnings.OptionObsoleteSource(source.name));
++            source = Source.MIN;
+         } else if (source == Source.MIN && lintOptions) {
+             log.warning(LintCategory.OPTIONS, Warnings.OptionObsoleteSource(source.name));
+             obsoleteOptionFound = true;
          }
 
-         if (!msgOptionSeen) {
--            doclintOpts.add(DocLint.XMSGS_OPTION);
-+            return;
-         }
-
-         String sep = "";
+         if (target.compareTo(Target.MIN) < 0) {
+-            log.error(Errors.OptionRemovedTarget(target.name, Target.MIN.name));
++            log.warning(LintCategory.OPTIONS, Warnings.OptionObsoleteTarget(target.name));
++            target = Target.MIN;
+         } else if (target == Target.MIN && lintOptions) {
+             log.warning(LintCategory.OPTIONS, Warnings.OptionObsoleteTarget(target.name));
+             obsoleteOptionFound = true;

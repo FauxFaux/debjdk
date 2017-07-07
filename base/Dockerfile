@@ -19,12 +19,11 @@ RUN \
     apt-get install -y -f && \
     apt-get clean
 
-COPY to-jdk-9_1.0_all.deb /
-COPY libmaven-javadoc-plugin-java_2.10.4-2_all.deb /
+COPY *.deb /
 
 RUN \
     apt-get install -y libmaven-javadoc-plugin-java && \
-    dpkg -i to-jdk-9_1.0_all.deb libmaven-javadoc-plugin-java_2.10.4-2_all.deb && \
+    dpkg -i *.deb && \
     rm *.deb && \
     apt-get clean
 
