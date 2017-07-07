@@ -10,19 +10,14 @@ Author: Andrew John Hughes <ahughes@redhat.com>
 Forwarded: not-needed
 Index: b/langtools/src/jdk.javadoc/share/classes/com/sun/tools/javadoc/DocEnv.java
 ===================================================================
---- a/langtools/src/jdk.javadoc/share/classes/com/sun/tools/javadoc/DocEnv.java
-+++ b/langtools/src/jdk.javadoc/share/classes/com/sun/tools/javadoc/DocEnv.java
-@@ -821,10 +821,9 @@ public class DocEnv {
-             doclintOpts.add(opt == null ? DocLint.XMSGS_OPTION : DocLint.XMSGS_CUSTOM_PREFIX + opt);
+--- a/langtools/src/jdk.javadoc/share/classes/jdk/javadoc/internal/doclets/toolkit/WorkArounds.java
++++ b/langtools/src/jdk.javadoc/share/classes/jdk/javadoc/internal/doclets/toolkit/WorkArounds.java
+@@ -125,7 +125,7 @@ public class WorkArounds {
          }
 
--        if (doclintOpts.isEmpty()) {
+         if (!msgOptionSeen) {
 -            doclintOpts.add(DocLint.XMSGS_OPTION);
--        } else if (doclintOpts.size() == 1
--                && doclintOpts.get(0).equals(DocLint.XMSGS_CUSTOM_PREFIX + "none")) {
-+        if (doclintOpts.isEmpty() ||
-+	    (doclintOpts.size() == 1
-+	     && doclintOpts.get(0).equals(DocLint.XMSGS_CUSTOM_PREFIX + "none"))) {
-             return;
++            return;
          }
 
+         String sep = "";
