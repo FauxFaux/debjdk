@@ -6,12 +6,9 @@ count() {
 
 ls -1 *.pkg | count success
 
-fgrep -l 'encoding US-ASCII' *.fail | count ascii
+egrep -l 'error: unmappable character|encoding US-ASCII' *.fail | count encoding
 
-egrep -l ': Unable to find javadoc command.*JAVA_HOME' *.fail | count javadoc
-
-egrep -l 'error: bad use of|error: @param |error: block element not|error: unexpected content|error: no summary or|error: end tag|error: self-closing|error: bad HTML|error: unexpected end' *.fail \
-    | count doclint
+fgrep -l 'Error while generating Javadoc:' *.fail | count javadoc
 
 fgrep -l 'is a keyword, and may not be used as an identifier' *.fail | count keyword
 
@@ -19,11 +16,15 @@ egrep -l 'Source option 1\.|-source 1\.[1-5] -target 1\.[1-5]|requires target re
 
 egrep -l 'reflect\.InaccessibleObjectException|reference to Module is ambigu|is not visible|because module .* does not export|location: package sun\.misc' *.fail | count modules
 
-egrep -l 'not resolve dependencies for project|Problem parsing dependency: Build-Depends-Indep|Non-resolvable parent POM for' *.fail | count deps
+egrep -l 'not resolve dependencies for project|Problem parsing dependency: Build-Depends-Indep|Non-resolvable parent POM for|Some packages could not be installed. This may mean that you have' *.fail | count deps
 
 egrep -l 'error: incompatible types:' *.fail | count cast
 
 fgrep -l 'There are test failures.' *.fail | count tests
+
+fgrep -l 'cannot find symbol' *.fail | count symbol
+
+fgrep -l 'java.lang.Object in compiler mirror not found' *.fail | count scala
 
 diff -u <(cat .*.lst .jenkins | sort -u) <(ls -1 *.fail | sed 's/.pkg.fail$//' | sort -u) | grep '^+' | cut -c2- | sed 1d > .unknown
 

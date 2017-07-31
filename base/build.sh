@@ -30,7 +30,7 @@ apt-get build-dep -y .
 
 
 msg Build
-nice ionice eatmydata dpkg-buildpackage -us -uc -b
+:|nice ionice eatmydata dpkg-buildpackage -us -uc -b
 
 
 msg Done
