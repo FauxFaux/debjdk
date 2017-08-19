@@ -5,13 +5,14 @@ Index: b/langtools/src/jdk.compiler/share/classes/com/sun/tools/javac/main/Argum
 ===================================================================
 --- a/langtools/src/jdk.compiler/share/classes/com/sun/tools/javac/main/Arguments.java
 +++ b/langtools/src/jdk.compiler/share/classes/com/sun/tools/javac/main/Arguments.java
-@@ -585,14 +585,16 @@ public class Arguments {
+@@ -585,14 +585,18 @@ public class Arguments {
          boolean obsoleteOptionFound = false;
 
          if (source.compareTo(Source.MIN) < 0) {
 -            log.error(Errors.OptionRemovedSource(source.name, Source.MIN.name));
 +            log.warning(LintCategory.OPTIONS, Warnings.OptionObsoleteSource(source.name));
 +            source = Source.MIN;
++            System.err.println("XXX: totally hacking the source version");
          } else if (source == Source.MIN && lintOptions) {
              log.warning(LintCategory.OPTIONS, Warnings.OptionObsoleteSource(source.name));
              obsoleteOptionFound = true;
@@ -21,6 +22,7 @@ Index: b/langtools/src/jdk.compiler/share/classes/com/sun/tools/javac/main/Argum
 -            log.error(Errors.OptionRemovedTarget(target.name, Target.MIN.name));
 +            log.warning(LintCategory.OPTIONS, Warnings.OptionObsoleteTarget(target.name));
 +            target = Target.MIN;
++            System.err.println("XXX: totally hacking the target version");
          } else if (target == Target.MIN && lintOptions) {
              log.warning(LintCategory.OPTIONS, Warnings.OptionObsoleteTarget(target.name));
              obsoleteOptionFound = true;
