@@ -14,9 +14,8 @@ RUN \
     cd java-common-* && \
     sed -i 's/java9_architectures =/& amd64/' debian/java_defaults.mk && \
     dpkg-buildpackage -us -uc -b && \
-    dpkg -i ../default-j[dr]*.deb ../java-common*.deb; \
+    apt-get install -y -f --allow-downgrades ../default-j[dr]*.deb ../java-common*.deb && \
     rm -rf ../java-common* ../*.deb && \
-    apt-get install -y -f && \
     apt-get clean
 
 COPY *.deb /
