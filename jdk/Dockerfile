@@ -17,7 +17,7 @@ WORKDIR /openjdk-9-9~b181
 COPY allow-old-source-versions.diff debian/patches/
 
 RUN \
-    sed -i 's,COMMON_PATCHES = \\,COMMON_PATCHES = allow-old-source-versions.diff \\,' debian/rules && \
+    sed -i 's,COMMON_PATCHES = \\,COMMON_PATCHES = allow-old-source-versions.diff disable-doclint-by-default.diff \\,' debian/rules && \
     grep \^COMMON_PATCHES debian/rules
 
 RUN \
