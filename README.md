@@ -34,6 +34,8 @@ named:
 
 Re-running make will rebuild everything that failed the first time.
 
+I've tried to make `make` make noise about what it's doing, but there's a problem somewhere:
+sometimes it will hang silently during one of the container builds. Shrug, don't care.
 
 Variations
 ----------
