@@ -74,7 +74,8 @@ The notes below are a simplified version of my
 Get us a whole load of discs:
 ```
 #sudo mdadm --create --verbose /dev/md0 --level=stripe --raid-devices=2 /dev/xvdb /dev/xvdc && \
-sudo mdadm --create --verbose /dev/md0 --level=stripe --raid-devices=4 /dev/nvme?n1 && \
+#sudo mdadm --create --verbose /dev/md0 --level=stripe --raid-devices=4 /dev/nvme?n1 && \
+sudo mdadm --create --verbose /dev/md0 --level=stripe --raid-devices=8 /dev/nvme?n1 && \
 sudo mkfs.xfs -K /dev/md0 && \
 sudo mkdir /mnt/data && \ 
 sudo mount -o nobarrier /dev/md0 /mnt/data
@@ -93,14 +94,16 @@ sudo systemctl stop docker
 Move the docker data onto our monstrous partition:
 ```
 sudo mv /var/lib/docker /mnt/data/ &&
-sudo ln -s /mnt/data/docker /var/lib
+sudo ln -s /mnt/data/docker /var/lib &&
+sudo systemctl start docker &&
+sudo usermod -a -G docker ubuntu
 ```
 
 Grab this repo and the dependency list:
 ```
 git clone https://github.com/FauxFaux/debjdk9 && \
 cd debjdk9 && \
-wget https://b.goeswhere.com/default-jdk-dependencies-2017-08-22.lst
+wget https://b.goeswhere.com/default-jdk-dependencies-2017-08-30.lst
 ```
 
 Can speed up this stage by copying any built `deb`s over,
@@ -111,4 +114,11 @@ And, in tmux, cripple the proxy (as deb.debian.org is fine), and go!
 tmux
 :>base/apt.conf && \
 make -j $(nproc) $(cat default-jdk-dependencies-*)
+```
+
+Notes
+-----
+
+```
+diff -u .broken <(fgrep -l 'error: unmappable character' $(cat .broken | sed 's/$/.pkg.fail/') | sed 's/.pkg.fail$//') | grep '^-' | cut -c2- | sed 1d > .non-encoding-broken
 ```
