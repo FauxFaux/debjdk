@@ -1,0 +1,10 @@
+libguestfs # build hangs on builder
+ceph # huge
+
+calligra # huge
+libreoffice # huge
+
+erlang # huge
+rustc # huge
+
+# scala and deps?
