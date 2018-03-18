@@ -6,13 +6,13 @@ COPY apt.conf /etc/apt/apt.conf.d/60docker
 RUN \
     apt-get update && \
     apt-get dist-upgrade -y && \
-    apt-get install -y --no-install-recommends build-essential debhelper openjdk-9-jdk && \
+    apt-get install -y --no-install-recommends apt-utils build-essential debhelper openjdk-10-jdk && \
     apt-get clean
 
 RUN \
     apt-get source java-common && \
     cd java-common-* && \
-    sed -i 's/java9_architectures =/& amd64/' debian/java_defaults.mk && \
+    sed -i 's/java10_architectures =/& amd64/' debian/java_defaults.mk && \
     dpkg-buildpackage -us -uc -b && \
     apt-get install -y -f --allow-downgrades ../default-j[dr]*.deb ../java-common*.deb && \
     rm -rf ../java-common* ../*.deb && \
